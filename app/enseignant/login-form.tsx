@@ -1,0 +1,9 @@
+"use client";
+import { FormEvent,useState } from "react";
+import { LockKeyhole } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card,CardContent,CardHeader,CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { teacherLogin } from "@/lib/supabase-api";
+export function TeacherLogin({onAuthenticated}:{onAuthenticated:(token:string)=>void}){const[password,setPassword]=useState(""),[error,setError]=useState(""),[loading,setLoading]=useState(false);async function submit(e:FormEvent){e.preventDefault();setLoading(true);setError("");try{onAuthenticated(await teacherLogin(password))}catch(e){setError(e instanceof Error?e.message:"Connexion impossible")}finally{setLoading(false)}}return <main className="grid min-h-screen place-items-center p-4"><Card className="section-card w-full max-w-md border-0"><CardHeader className="text-center"><span className="mx-auto mb-3 grid size-14 place-items-center rounded-2xl bg-primary text-white"><LockKeyhole/></span><CardTitle className="text-2xl">Espace enseignant</CardTitle><p className="text-sm text-muted-foreground">Saisissez le mot de passe pour consulter les rapports.</p></CardHeader><CardContent><form onSubmit={submit} className="grid gap-4"><div><Label htmlFor="teacher-password">Mot de passe</Label><Input id="teacher-password" type="password" autoComplete="current-password" className="mt-2" value={password} onChange={e=>setPassword(e.target.value)} autoFocus required/></div>{error&&<p role="alert" className="rounded-lg bg-red-50 p-3 text-sm font-semibold text-red-700">{error}</p>}<Button type="submit" disabled={loading}>{loading?"Vérification…":"Se connecter"}</Button><a className="text-center text-sm font-semibold text-primary" href="../">Retour à l'évaluation</a></form></CardContent></Card></main>}
