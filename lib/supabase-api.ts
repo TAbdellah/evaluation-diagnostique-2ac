@@ -54,3 +54,6 @@ export async function teacherUpdate(id:string,teacherNote:string,token=teacherTo
   const data=await call<{submission:RawRow}>({action:"update",token,id,teacherNote});
   return view(data.submission);
 }
+export async function teacherDelete(id:string,token=teacherToken()) {
+  return call<{deletedId:string}>({action:"delete",token,id});
+}
